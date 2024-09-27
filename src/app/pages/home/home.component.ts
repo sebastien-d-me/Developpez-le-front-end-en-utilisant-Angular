@@ -1,32 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { OlympicService } from 'src/app/core/services/olympic.service';
-import { ChartComponent, ApexResponsive, ApexChart } from 'ng-apexcharts';
+import { Component, OnInit } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { OlympicService } from "src/app/core/services/olympic.service";
+import { ApexNonAxisChartSeries, ApexChart, ApexLegend } from "ng-apexcharts";
+import { HttpClient } from "@angular/common/http";
 
 export type ChartOptions = {
+    series: ApexNonAxisChartSeries;
     chart: ApexChart;
-    responsive: ApexResponsive[];
     labels: any;
+    legend: ApexLegend;
 };
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
     public olympics$: Observable<any> = of(null);
     public chartOptions: Partial<any>;
-    public chart: ApexChart = { type: 'bar' };
+    public chart: ApexChart = { type: "pie" };
 
-    constructor(private olympicService: OlympicService) {
+    constructor(private http: HttpClient, private olympicService: OlympicService) {
+        this.http.get("/assets/mock/olympic.json").subscribe(config => {
+            console.log(config);
+        });
+
         this.chartOptions = {
             series: [96, 54, 345, 125, 113],
             labels: ["Italy", "Spain", "United States", "Germany", "France"],
             chart: {
-                width: 400,
+                height: 500,
                 type: "pie",
-            }
+                width: 500,
+            },
+            legend: {
+                show: false,
+            },
         };
     }
 
