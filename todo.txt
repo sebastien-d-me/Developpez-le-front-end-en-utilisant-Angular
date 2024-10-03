@@ -1,0 +1,6 @@
+- Nettoyer le code
+- Commenter le code
+- Penser à "Unsubscribe"
+- Optimiser au mieux possible le code
+- Suivre les recommandations
+- Eviter les any

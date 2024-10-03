@@ -17,15 +17,17 @@ export type ChartOptions = {
 })
 export class HomeComponent implements OnInit {
     public olympics$: Observable<any> = of(null);
+    public olympicCountries: any;
     public olympicsJo: number;
 
     public chartOptions: Partial<any>;
     public chart: ApexChart = { type: "pie" };
 
     constructor(private olympicService: OlympicService) {
+        this.olympicCountries = [];
+
         this.chartOptions = {
             series: [96, 54, 345, 125, 113],
-            labels: ["Italy", "Spain", "United States", "Germany", "France"],
             chart: {
                 height: 600,
                 type: "pie",
@@ -61,13 +63,23 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.olympicsJo = this.getNumberJo();
+        this.getCountries();
+        this.getNumberJo();
+    }
+
+    getCountries(): any {
+        this.olympics$.subscribe((response) => {
+            response?.map((test: any) => {
+                this.olympicCountries.push(test.country);
+            });
+
+            return this.olympicCountries;
+        });
     }
 
     getNumberJo(): any {
         this.olympics$.subscribe((response) => {
             const numberJo = response?.reduce((countries: any, country: any) => {
-                console.log(countries.participations);
                 return (country.participations.length > countries.participations.length ? country : countries);
             });
 
