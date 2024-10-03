@@ -17,6 +17,8 @@ export type ChartOptions = {
 })
 export class HomeComponent implements OnInit {
     public olympics$: Observable<any> = of(null);
+    public olympicsJo: number;
+
     public chartOptions: Partial<any>;
     public chart: ApexChart = { type: "pie" };
 
@@ -25,9 +27,9 @@ export class HomeComponent implements OnInit {
             series: [96, 54, 345, 125, 113],
             labels: ["Italy", "Spain", "United States", "Germany", "France"],
             chart: {
-                height: 1000,
+                height: 600,
                 type: "pie",
-                width: 1000,
+                width: 600,
             },
             legend: {
                 show: false,
@@ -53,9 +55,23 @@ export class HomeComponent implements OnInit {
                 },
             ]
         };
+
+        this.olympicsJo = 0;
     }
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
+        this.olympicsJo = this.getNumberJo();
+    }
+
+    getNumberJo(): any {
+        this.olympics$.subscribe((response) => {
+            const numberJo = response?.reduce((countries: any, country: any) => {
+                console.log(countries.participations);
+                return (country.participations.length > countries.participations.length ? country : countries);
+            });
+
+            return this.olympicsJo = numberJo?.["participations"].length;
+        });
     }
 }

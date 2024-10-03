@@ -6,16 +6,15 @@
     <div class="cards">
         <div class="card">
             <span class="card__title">Number of JOs</span>
-            <span class="card__number">10</span>
+            <span class="card__number">{{ (olympicsJo) }}</span>
         </div>
         <div class="card">
             <span class="card__title">Number of countries</span>
-            <span class="card__number">10</span>
+            <span class="card__number">{{ (olympics$ | async)?.length }}</span>
         </div>
     </div>
 
     <!-- Chart-->
-    <!--<p>{{ (olympics$ | async)?.length }} data loaded</p>-->
     <apx-chart class="chart"
         [series]="chartOptions['series']"
         [chart]="chartOptions['chart']"
