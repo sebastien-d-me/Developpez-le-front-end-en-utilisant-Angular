@@ -35,6 +35,12 @@ export class HomeComponent implements OnInit {
                 height: 600,
                 type: "pie",
                 width: 600,
+                events: {
+                    dataPointSelection: (event: any, chartContext: any, opts: any) => {
+                        console.log(opts.w.config.labels[opts.dataPointIndex]);
+                        console.log(opts.w.config.series[opts.dataPointIndex]);
+                    }
+                }
             },
             legend: {
                 show: false,
