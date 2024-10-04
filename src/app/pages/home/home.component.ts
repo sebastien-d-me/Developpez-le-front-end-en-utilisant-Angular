@@ -69,8 +69,9 @@ export class HomeComponent implements OnInit {
 
     getCountries(): any {
         this.olympics$.subscribe((response) => {
-            response?.map((test: any) => {
-                this.olympicCountries.push(test.country);
+            response?.map((name: any) => {
+                this.olympicCountries.push(name.country);
+                this.getMedals(name.country);
             });
 
             return this.olympicCountries;
@@ -84,6 +85,15 @@ export class HomeComponent implements OnInit {
             });
 
             return this.olympicsJo = numberJo?.["participations"].length;
+        });
+    }
+
+    getMedals(countryName: string): any {
+        this.olympics$.subscribe((response) => {
+            const testa = (response?.find((e: any) => e.country == countryName));
+            testa?.participations.map((abcdef: any) => {
+                console.log(abcdef.medalsCount)
+            });
         });
     }
 }

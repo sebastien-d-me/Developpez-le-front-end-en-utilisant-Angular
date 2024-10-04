@@ -4,3 +4,10 @@
 - Optimiser au mieux possible le code
 - Suivre les recommandations
 - Eviter les any
+
+- Bouton retour sur la page détails
+- Readme comment démarrer l'app
+- Observable etc
+- Savoir expliquer service, composants
+Composants -> METTRE number of jo et number coutnries en composants reutilisable (titre et card),
+    composant titre en vert
