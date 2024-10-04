@@ -19,15 +19,18 @@ export class HomeComponent implements OnInit {
     public olympics$: Observable<any> = of(null);
     public olympicCountries: any;
     public olympicsJo: number;
+    public countriesMedal: any;
+    public countriesMedals: any;
 
     public chartOptions: Partial<any>;
     public chart: ApexChart = { type: "pie" };
 
     constructor(private olympicService: OlympicService) {
         this.olympicCountries = [];
+        this.countriesMedal = [];
+        this.countriesMedals = [];
 
         this.chartOptions = {
-            series: [96, 54, 345, 125, 113],
             chart: {
                 height: 600,
                 type: "pie",
@@ -92,8 +95,11 @@ export class HomeComponent implements OnInit {
         this.olympics$.subscribe((response) => {
             const testa = (response?.find((e: any) => e.country == countryName));
             testa?.participations.map((abcdef: any) => {
-                console.log(abcdef.medalsCount)
+                this.countriesMedal.push(abcdef.medalsCount)
             });
         });
+        const abc = this.countriesMedal.reduce((a: any, b: any) => a + b, 0);
+        this.countriesMedals.push(abc);
+        this.countriesMedal = [];
     }
 }
