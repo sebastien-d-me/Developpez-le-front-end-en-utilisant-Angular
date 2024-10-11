@@ -1,11 +1,11 @@
 <div class="container__page">
     <!-- Title-->
-    <h1 class="page__title">Medals per Country</h1>
+    <app-title [name]="'Medals per Country'"></app-title>
 
     <!-- Cards -->
     <div class="cards">
-        <app-card [title]="'Number of JOs'" [values]=olympicsJo></app-card>
-        <app-card [title]="'Number of countries'" [values]=olympicCountries.length></app-card>
+        <app-card [name]="'Number of JOs'" [values]=olympicsJo></app-card>
+        <app-card [name]="'Number of countries'" [values]=olympicCountries.length></app-card>
     </div>
 
     <!-- Chart-->
