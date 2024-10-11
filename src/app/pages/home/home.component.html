@@ -4,14 +4,8 @@
 
     <!-- Cards -->
     <div class="cards">
-        <div class="card">
-            <span class="card__title">Number of JOs</span>
-            <span class="card__number">{{ (olympicsJo) }}</span>
-        </div>
-        <div class="card">
-            <span class="card__title">Number of countries</span>
-            <span class="card__number">{{ (olympics$ | async)?.length }}</span>
-        </div>
+        <app-card [title]="'Number of JOs'" [values]=olympicsJo></app-card>
+        <app-card [title]="'Number of countries'" [values]=olympicCountries.length></app-card>
     </div>
 
     <!-- Chart-->

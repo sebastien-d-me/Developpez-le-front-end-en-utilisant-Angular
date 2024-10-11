@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, NotFoundComponent],
-  imports: [BrowserModule, AppRoutingModule, NgApexchartsModule],
+  imports: [BrowserModule, AppRoutingModule, NgApexchartsModule, CardComponent],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent],
 })

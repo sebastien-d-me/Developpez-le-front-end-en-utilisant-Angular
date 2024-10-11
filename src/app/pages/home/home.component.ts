@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { ApexNonAxisChartSeries, ApexChart, ApexLegend } from "ng-apexcharts";
+import { CardComponent } from "src/app/components/card/card.component";
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
