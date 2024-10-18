@@ -2,13 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { ApexNonAxisChartSeries, ApexChart, ApexLegend } from "ng-apexcharts";
-import { CardComponent } from "src/app/components/card/card.component";
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: any;
     legend: ApexLegend;
+    tooltip: any;
 };
 
 @Component({
@@ -44,7 +44,28 @@ export class HomeComponent implements OnInit {
                 }
             },
             legend: {
-                show: false,
+                position: "bottom"
+            },
+            tooltip: {
+                custom: function(opts: any) {
+                    return `
+                    <style>
+                        .chart__tooltip {
+                            background-color: #04838F;    
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2px 0;
+                            min-width: 60px;
+                            padding: 5px 10px;
+                            text-align: center;
+                        }
+                    </style>
+
+                    <div class="chart__tooltip">
+                        <span>${opts.w.globals.labels[opts.seriesIndex]}</span>
+                        <span>🎖️ ${opts.series[opts.seriesIndex]}</span>
+                    </div>`;
+                }
             },
             responsive: [
                 {

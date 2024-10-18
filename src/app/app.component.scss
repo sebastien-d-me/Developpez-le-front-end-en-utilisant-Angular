@@ -3,10 +3,21 @@
     font-family: "Arial", sans-serif;
 }
 
+
 // Container
 .container {
     align-items: center;
     display: flex;
     flex-direction: column;
     padding: 35px 5px;
+}
+
+
+// Cards
+.cards {
+    align-items: center;
+    display: flex;
+    gap: 0 20px;
+    justify-content: center;
+    margin-top: 25px;
 }
