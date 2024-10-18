@@ -9,6 +9,19 @@
         <app-card [name]="'Total number of athletes'" [values]=32></app-card>
     </div>
 
+    <!--- Chart -->
+    <apx-chart
+        [series]="chartOptions['series']"
+        [chart]="chartOptions['chart']"
+        [xaxis]=dates
+        [dataLabels]="chartOptions['dataLabels']"
+        [grid]="chartOptions['grid']"
+        [stroke]="chartOptions['stroke']"
+        [title]="chartOptions['title']"
+        [tooltip]="chartOptions['tooltip']"
+    ></apx-chart>
+
+    <!-- Back -->
     <nav>
         <app-button [name]="'Back'" [link]="'/'"></app-button>
     </nav>
