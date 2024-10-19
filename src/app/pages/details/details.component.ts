@@ -16,6 +16,7 @@ export type ChartOptions = {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: any;
+    yaxis: any;
     dataLabels: ApexDataLabels;
     grid: ApexGrid;
     stroke: ApexStroke;
@@ -30,20 +31,15 @@ export type ChartOptions = {
 export class DetailsComponent implements OnInit {
     public olympics$: Observable<any> = of(null)
     public chartOptions: Partial<any>;
-    public datesXAxis: any;
-    public dates: any;
 
     public chart: ApexChart = { type: "line" };
     
     constructor(private olympicService: OlympicService) {
-        this.datesXAxis = [];
-        this.dates = [];
 
         this.chartOptions = {
           series: [
             {
-              name: "Desktops",
-              data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+              data: []
             }
           ],
           chart: {
@@ -72,27 +68,38 @@ export class DetailsComponent implements OnInit {
           tooltip: {
             enabled: false,
           },
+          xaxis: {
+            categories: []
+          },
+          yaxis: {
+            min: 0,
+            max: 100,
+            tickAmount: 5,
+          }
         };
     }
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
         this.getDates();
+        this.getMedals();
     }
 
-    getDates(): void {
+    getDates(): any {
         this.olympics$.subscribe((response) => {
             const testa = (response?.find((e: any) => e.id == 1));
             testa?.participations.map((date: any) => {
-                this.datesXAxis.push(`"${date.year}"`);
-                console.log(this.datesXAxis)
-                this.dates = `categories: [
-                    ${this.datesXAxis}
-                ]`
-                console.log(this.dates)
-                return this.dates;
+                this.chartOptions['xaxis'].categories.push(date.year);
             });
         });
+    }
 
+    getMedals(): any {
+        this.olympics$.subscribe((response) => {
+            const testa = (response?.find((e: any) => e.id == 1));
+            testa?.participations.map((abcdef: any) => {
+                this.chartOptions['series'][0].data.push(abcdef.medalsCount)
+            });
+        });
     }
 }
