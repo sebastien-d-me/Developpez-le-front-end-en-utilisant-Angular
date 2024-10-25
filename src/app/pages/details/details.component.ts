@@ -11,6 +11,7 @@ import {
 } from "ng-apexcharts";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Observable, of } from "rxjs";
+import { ActivatedRoute } from '@angular/router';
 
 export type ChartOptions = {
     series: ApexAxisChartSeries;
@@ -33,8 +34,16 @@ export class DetailsComponent implements OnInit {
     public chartOptions: Partial<any>;
 
     public chart: ApexChart = { type: "line" };
+
+    public totalMedals:  number;
+
+    countryId: number;
+    maxMedals: number;
     
-    constructor(private olympicService: OlympicService) {
+    constructor(private olympicService: OlympicService, private route: ActivatedRoute) {
+        this.countryId = 0;
+        this.maxMedals = 0;
+        this.totalMedals = 0;
 
         this.chartOptions = {
           series: [
@@ -44,6 +53,9 @@ export class DetailsComponent implements OnInit {
           ],
           chart: {
             height: 350,
+            toolbar: {
+                show: false
+            },
             type: "line",
             zoom: {
               enabled: false
@@ -61,7 +73,7 @@ export class DetailsComponent implements OnInit {
           },
           grid: {
             row: {
-              colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+              colors: ["#f3f3f3", "transparent"],
               opacity: 0.5
             }
           },
@@ -73,7 +85,6 @@ export class DetailsComponent implements OnInit {
           },
           yaxis: {
             min: 0,
-            max: 100,
             tickAmount: 5,
           }
         };
@@ -81,13 +92,16 @@ export class DetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.getDates();
-        this.getMedals();
+        this.route.params.subscribe(params => {
+            this.countryId = params['id'];
+            this.getDates();
+            this.getMedals();
+        });
     }
 
     getDates(): any {
         this.olympics$.subscribe((response) => {
-            const testa = (response?.find((e: any) => e.id == 1));
+            const testa = (response?.find((e: any) => e.id == this.countryId));
             testa?.participations.map((date: any) => {
                 this.chartOptions['xaxis'].categories.push(date.year);
             });
@@ -96,10 +110,14 @@ export class DetailsComponent implements OnInit {
 
     getMedals(): any {
         this.olympics$.subscribe((response) => {
-            const testa = (response?.find((e: any) => e.id == 1));
+            const testa = (response?.find((e: any) => e.id == this.countryId));
             testa?.participations.map((abcdef: any) => {
+                
                 this.chartOptions['series'][0].data.push(abcdef.medalsCount)
+                const nbMedals = (this.chartOptions['series'][0].data).length;
+                this.totalMedals = nbMedals;
             });
+            this.chartOptions['yaxis'].max = Math.max(...this.chartOptions['series'][0].data) + 10;
         });
     }
 }

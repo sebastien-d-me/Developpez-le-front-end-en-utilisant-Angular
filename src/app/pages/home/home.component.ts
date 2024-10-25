@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { ApexNonAxisChartSeries, ApexChart, ApexLegend } from "ng-apexcharts";
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
     public chartOptions: Partial<any>;
     public chart: ApexChart = { type: "pie" };
 
-    constructor(private olympicService: OlympicService) {
+    constructor(private olympicService: OlympicService, private router: Router, private route: ActivatedRoute) {
         this.olympicCountries = [];
         this.countriesMedal = [];
         this.countriesMedals = [];
@@ -38,8 +39,9 @@ export class HomeComponent implements OnInit {
                 width: 600,
                 events: {
                     dataPointSelection: (event: any, chartContext: any, opts: any) => {
-                        console.log(opts.w.config.labels[opts.dataPointIndex]);
-                        console.log(opts.w.config.series[opts.dataPointIndex]);
+                        /*console.log(opts.w.config.labels[opts.dataPointIndex]);
+                        console.log(opts.w.config.series[opts.dataPointIndex]);*/
+                        this.router.navigate(["/details", opts.dataPointIndex + 1]);
                     }
                 }
             },
