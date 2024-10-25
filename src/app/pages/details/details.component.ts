@@ -41,6 +41,7 @@ export class DetailsComponent implements OnInit {
     maxMedals: number;
     countryName: string;
     nbParticipations: number;
+    totalAtlhetes: number;
     
     constructor(private olympicService: OlympicService, private route: ActivatedRoute) {
         this.countryId = 0;
@@ -48,6 +49,7 @@ export class DetailsComponent implements OnInit {
         this.totalMedals = 0;
         this.nbParticipations = 0;
         this.countryName = "";
+        this.totalAtlhetes = 0;
 
         this.chartOptions = {
           series: [
@@ -94,6 +96,7 @@ export class DetailsComponent implements OnInit {
             this.getTitle();
             this.getDates();
             this.getMedals();
+            this.getAthletes();
         });
     }
 
@@ -123,6 +126,16 @@ export class DetailsComponent implements OnInit {
                 this.totalMedals+= abcdef.medalsCount;
             });
             this.chartOptions['yaxis'].max = Math.max(...this.chartOptions['series'][0].data) + 10;
+        });
+    }
+
+    getAthletes(): any {
+        this.olympics$.subscribe((response) => {
+            const testa = (response?.find((e: any) => e.id == this.countryId));
+            this.nbParticipations = testa?.participations.length;
+            testa?.participations.map((abcdef: any) => {
+                this.totalAtlhetes += abcdef.athleteCount
+            });
         });
     }
 }
