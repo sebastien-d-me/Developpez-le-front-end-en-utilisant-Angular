@@ -39,11 +39,15 @@ export class DetailsComponent implements OnInit {
 
     countryId: number;
     maxMedals: number;
+    countryName: string;
+    nbParticipations: number;
     
     constructor(private olympicService: OlympicService, private route: ActivatedRoute) {
         this.countryId = 0;
         this.maxMedals = 0;
         this.totalMedals = 0;
+        this.nbParticipations = 0;
+        this.countryName = "";
 
         this.chartOptions = {
           series: [
@@ -61,15 +65,8 @@ export class DetailsComponent implements OnInit {
               enabled: false
             }
           },
-          dataLabels: {
-            enabled: false
-          },
           stroke: {
             curve: "straight"
-          },
-          title: {
-            text: "Dates",
-            align: "center"
           },
           grid: {
             row: {
@@ -94,8 +91,16 @@ export class DetailsComponent implements OnInit {
         this.olympics$ = this.olympicService.getOlympics();
         this.route.params.subscribe(params => {
             this.countryId = params['id'];
+            this.getTitle();
             this.getDates();
             this.getMedals();
+        });
+    }
+
+    getTitle(): any {
+        this.olympics$.subscribe((response) => {
+            const ttest = (response?.find((e: any) => e.id == this.countryId));
+            this.countryName = ttest?.country;
         });
     }
 
@@ -111,11 +116,11 @@ export class DetailsComponent implements OnInit {
     getMedals(): any {
         this.olympics$.subscribe((response) => {
             const testa = (response?.find((e: any) => e.id == this.countryId));
+            this.nbParticipations = testa?.participations.length;
             testa?.participations.map((abcdef: any) => {
                 
                 this.chartOptions['series'][0].data.push(abcdef.medalsCount)
-                const nbMedals = (this.chartOptions['series'][0].data).length;
-                this.totalMedals = nbMedals;
+                this.totalMedals+= abcdef.medalsCount;
             });
             this.chartOptions['yaxis'].max = Math.max(...this.chartOptions['series'][0].data) + 10;
         });

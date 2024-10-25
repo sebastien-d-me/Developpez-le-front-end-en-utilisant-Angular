@@ -1,10 +1,10 @@
 <div class="container__page">
     <!-- Title-->
-    <app-title [name]="'Name of the country'"></app-title>
+    <app-title [name]=countryName></app-title>
 
     <!-- Cards -->
     <div class="cards">
-        <app-card [name]="'Number of entries'" [values]=3></app-card>
+        <app-card [name]="'Number of entries'" [values]=nbParticipations></app-card>
         <app-card [name]="'Total number medals'" [values]=totalMedals></app-card>
         <app-card [name]="'Total number of athletes'" [values]=32></app-card>
     </div>
@@ -21,6 +21,7 @@
         [title]="chartOptions['title']"
         [tooltip]="chartOptions['tooltip']"
     ></apx-chart>
+    <span class="chart__title">Dates</span>
 
     <!-- Back -->
     <nav>
