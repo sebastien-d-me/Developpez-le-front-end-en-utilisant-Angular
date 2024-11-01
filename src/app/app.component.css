@@ -1,1 +1,18 @@
-/*# sourceMappingURL=app.component.css.map */
+* {
+  font-family: "Arial", sans-serif;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 35px 5px;
+}
+
+.cards {
+  align-items: center;
+  display: flex;
+  gap: 0 20px;
+  justify-content: center;
+  margin-top: 25px;
+}/*# sourceMappingURL=app.component.css.map */

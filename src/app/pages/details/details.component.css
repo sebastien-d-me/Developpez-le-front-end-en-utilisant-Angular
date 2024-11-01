@@ -1,0 +1,13 @@
+.cards {
+  align-items: center;
+  display: flex;
+  gap: 0 20px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.chart__title {
+  display: block;
+  font-size: 24px;
+  text-align: center;
+}/*# sourceMappingURL=details.component.css.map */

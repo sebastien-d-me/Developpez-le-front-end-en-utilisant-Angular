@@ -1,1 +1,18 @@
-/*# sourceMappingURL=home.component.css.map */
+.container__page {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards {
+  align-items: center;
+  display: flex;
+  gap: 0 20px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.chart {
+  display: flex;
+  margin-top: 25px;
+}/*# sourceMappingURL=home.component.css.map */
