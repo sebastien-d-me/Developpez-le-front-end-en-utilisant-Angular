@@ -4,15 +4,15 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@ang
 
 
 declare const require: {
-  context(path: string, deep?: boolean, filter?: RegExp): {
-    <T>(id: string): T;
-    keys(): string[];
-  };
+    context(path: string, deep?: boolean, filter?: RegExp): {
+        <T>(id: string): T;
+        keys(): string[];
+    };
 };
 
 getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(),
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting(),
 );
 
 const context = require.context("./", true, /\.spec\.ts$/);

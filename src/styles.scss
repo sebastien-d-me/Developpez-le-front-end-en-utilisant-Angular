@@ -1,0 +1,31 @@
+// Content
+* {
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+// Container
+.container__page {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    &--center {
+        justify-content: center;
+        min-height: calc(100vh - 40px);
+    }
+}
+
+
+// Cards
+.cards {
+    align-items: center;
+    display: flex;
+    gap: 0 20px;
+    justify-content: center;
+    margin-top: 25px;
+}
