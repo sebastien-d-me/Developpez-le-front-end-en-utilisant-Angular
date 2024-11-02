@@ -29,3 +29,15 @@
     justify-content: center;
     margin-top: 25px;
 }
+
+
+// Chart
+.chart__tooltip {
+    background-color: #04838F;    
+    display: flex;
+    flex-direction: column;
+    gap: 2px 0;
+    min-width: 60px;
+    padding: 5px 10px;
+    text-align: center;
+}

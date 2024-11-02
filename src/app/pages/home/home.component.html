@@ -4,15 +4,15 @@
 
     <!-- Cards -->
     <div class="cards">
-        <app-card [name]="'Number of JOs'" [values]=olympicsJo></app-card>
-        <app-card [name]="'Number of countries'" [values]=olympicCountries.length></app-card>
+        <app-card [name]="'Number of JOs'" [values]=numberJo></app-card>
+        <app-card [name]="'Number of countries'" [values]="chartOptions['labels'].length"></app-card>
     </div>
 
     <!-- Chart-->
-    <apx-chart class="chart"
-        [series]=countriesMedals
+    <apx-chart class="chart__home"
+        [series]="chartOptions['series']"
         [chart]="chartOptions['chart']"
-        [labels]=olympicCountries
+        [labels]="chartOptions['labels']"
         [legend]="chartOptions['legend']"
         [tooltip]="chartOptions['tooltip']"
         [responsive]="chartOptions['responsive']"
