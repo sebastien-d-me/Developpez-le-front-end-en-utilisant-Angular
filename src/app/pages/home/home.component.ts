@@ -3,6 +3,8 @@ import { ApexNonAxisChartSeries, ApexChart, ApexDataLabels, ApexLegend, ApexTool
 import { Observable, of, Subscription } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
+import { Olympic } from "src/app/core/models/Olympic";
+import { Participation } from "src/app/core/models/Participation";
 
 
 export type ChartOptions = {
@@ -97,7 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     // Get the countries
     getCountries(olympicData: any): void {
-        olympicData?.map((data: any) => {
+        olympicData?.map((data: Olympic) => {
             this.chartOptions["labels"].push(data.country);
             this.getMedals(olympicData, data.country);
         });
@@ -106,9 +108,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Get the medals per country
     getMedals(olympicData: any, countryName: string): void {
         const country = (olympicData?.find((e: any) => e.country == countryName));
-        const countryMedals = country?.participations.map((participation: any) => {
+        const countryMedals = country?.participations.map((participation: Participation) => {
             return participation.medalsCount;
-        }).reduce((a: any, b: any) => a + b, 0);
+        }).reduce((a: number, b: number) => a + b, 0);
         this.chartOptions['series'].push(countryMedals)
     }
 }
