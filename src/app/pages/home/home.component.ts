@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ApexNonAxisChartSeries, ApexChart, ApexDataLabels, ApexLegend, ApexTooltip } from "ng-apexcharts";
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
 
@@ -18,28 +18,18 @@ export type ChartOptions = {
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit {
-    public numberJo: number;
-
-
-    public olympics$: Observable<any> = of(null);
-    
-
-
-
-
-    
-
+export class HomeComponent implements OnInit, OnDestroy {
     public chartOptions: Partial<any>;
-    public chart: ApexChart = { type: "pie" };
+    public chart: ApexChart = {type: "pie"};
+    public olympics$: Observable<any> = of(null);
+    public olympicSubscribe: any;
+    public numberJo: number = 0;
 
     constructor(private olympicService: OlympicService, private router: Router) {
-        this.numberJo = 0;
-
         this.chartOptions = {
             chart: {
                 events: {
-                    dataPointSelection: (event: any, chartContext: any, opts: any) => {
+                    click: (event: any, chartContext: any, opts: any) => {
                         this.router.navigate(["/details", opts.dataPointIndex + 1]);
                     }
                 },
@@ -84,39 +74,41 @@ export class HomeComponent implements OnInit {
         };
     }
 
+    // Init the data
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.getNumberJo();
-        this.getCountries();
-    }
-
-    // Get the number of JO's
-    getNumberJo(): void {
-        this.olympics$.subscribe((response) => {
-            this.numberJo = response?.reduce((countries: any, country: any) => {
-                return (country.participations.length > countries.participations.length ? country : countries);
-            })["participations"].length;
+        this.olympicSubscribe = this.olympics$.subscribe((olympicData) => {
+            this.getNumberJo(olympicData);
+            this.getCountries(olympicData);
         });
     }
 
+    // Destroy the subscriber
+    ngOnDestroy(): void {
+        this.olympicSubscribe.unsubscribe();
+    }
+
+    // Get the number of JO's
+    getNumberJo(olympicData: any): void {
+        this.numberJo = olympicData?.reduce((countries: any, country: any) => {
+            return (country.participations.length > countries.participations.length ? country : countries);
+        })["participations"].length;
+    }
+
     // Get the countries
-    getCountries(): void {
-        this.olympics$.subscribe((response) => {
-            response?.map((data: any) => {
-                this.chartOptions["labels"].push(data.country);
-                this.getMedals(data.country);
-            });
+    getCountries(olympicData: any): void {
+        olympicData?.map((data: any) => {
+            this.chartOptions["labels"].push(data.country);
+            this.getMedals(olympicData, data.country);
         });
     }
 
     // Get the medals per country
-    getMedals(countryName: string): void {
-        this.olympics$.subscribe((response) => {
-            const country = (response?.find((e: any) => e.country == countryName));
-            const countryMedals = country?.participations.map((participation: any) => {
-                return participation.medalsCount;
-            }).reduce((a: any, b: any) => a + b, 0);
-            this.chartOptions['series'].push(countryMedals)
-        });
+    getMedals(olympicData: any, countryName: string): void {
+        const country = (olympicData?.find((e: any) => e.country == countryName));
+        const countryMedals = country?.participations.map((participation: any) => {
+            return participation.medalsCount;
+        }).reduce((a: any, b: any) => a + b, 0);
+        this.chartOptions['series'].push(countryMedals)
     }
 }
