@@ -70,8 +70,9 @@ export class DetailsComponent implements OnInit {
                 categories: []
             },
             yaxis: {
+                max: 100,
                 min: 0,
-                tickAmount: 5,
+                tickAmount: 5
             }
         };
     }
@@ -100,12 +101,11 @@ export class DetailsComponent implements OnInit {
     getDates(currentCountry: any): void {
         currentCountry?.participations.map((participation: any) => {
             this.chartOptions["xaxis"]?.categories.push(participation.year ?? 0);
-            console.log(this.chartOptions["xaxis"])
         });
     }
 
     getMedals(currentCountry: any): void {
-        this.olympics$.subscribe((response) => {
+        /*this.olympics$.subscribe((response) => {
             /*const testa = (response?.find((e: any) => e.id == this.countryId));
             this.nbParticipations = testa?.participations.length;
             testa?.participations.map((abcdef: any) => {
@@ -114,7 +114,20 @@ export class DetailsComponent implements OnInit {
                 this.totalMedals+= abcdef.medalsCount;
             });
             this.chartOptions["yaxis"].max = Math.max(...this.chartOptions["series"][0].data) + 10;*/
+        /*});*/
+        this.nbParticipations = currentCountry?.participations.length ?? 0;
+        currentCountry?.participations.map((participation: any) => {
+            this.chartOptions["series"]![0].data.push(participation.medalsCount);
+            /*this.chartOptions["yaxis"]!.max = 0;*/
+            this.totalMedals+= participation.medalsCount;
         });
+        console.log(this.chartOptions["series"]![0].data);
+        let max = this.chartOptions["series"]![0].data.reduce((accumulator: any, currentValue: any) => {
+            return Math.max(accumulator, currentValue);
+        }, this.chartOptions["series"]![0].data[0]);
+        
+       console.log(typeof this.chartOptions["yaxis"])
+       /*this.chartOptions?["yaxis"].max = [2020];*/
     }
 
     // Get the total of athletes
