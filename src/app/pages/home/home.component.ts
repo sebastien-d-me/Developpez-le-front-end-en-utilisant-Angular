@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
                 custom: function(opts: ChartOptionsInterface) {
                     return `
                     <div class="chart__tooltip">
-                        <span>${opts.w.globals.labels[opts.seriesIndex]}</span>
+                        <b>${opts.w.globals.labels[opts.seriesIndex]}</b>
                         <span>🎖️ ${opts.series[opts.seriesIndex]}</span>
                     </div>`;
                 }

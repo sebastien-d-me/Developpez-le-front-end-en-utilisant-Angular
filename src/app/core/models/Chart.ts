@@ -14,7 +14,8 @@ export interface ChartOptionsInterface {
     seriesIndex: number;
     w: {
         globals: {
-            labels: string[]
+            labels: string[];
+            seriesNames: [];
         }
     };
 }

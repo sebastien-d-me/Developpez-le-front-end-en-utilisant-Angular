@@ -57,20 +57,26 @@ export class DetailsComponent implements OnInit {
             },
             series: [
                 {
-                    data: []
+                    data: [],
+                    name: "Medals"
                 }
             ],
             stroke: {
                 curve: "straight"
             },
             tooltip: {
-                enabled: false,
+                custom: function({dataPointIndex, w}) {
+                    return `
+                    <div class="chart__tooltip">
+                        <b>${w.globals.seriesNames}</b>
+                        <span>🎖️ ${w.globals.initialSeries[0].data[dataPointIndex]}</span>
+                    </div>`;
+                }
             },
             xaxis: {
                 categories: []
             },
             yaxis: {
-                max: 100,
                 min: 0,
                 tickAmount: 5
             }
@@ -121,13 +127,10 @@ export class DetailsComponent implements OnInit {
             /*this.chartOptions["yaxis"]!.max = 0;*/
             this.totalMedals+= participation.medalsCount;
         });
-        console.log(this.chartOptions["series"]![0].data);
         let max = this.chartOptions["series"]![0].data.reduce((accumulator: any, currentValue: any) => {
             return Math.max(accumulator, currentValue);
         }, this.chartOptions["series"]![0].data[0]);
-        
-       console.log(typeof this.chartOptions["yaxis"])
-       /*this.chartOptions?["yaxis"].max = [2020];*/
+        /*this.chartOptions?["yaxis"].max = [2020];*/
     }
 
     // Get the total of athletes

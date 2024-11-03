@@ -26,6 +26,7 @@
 
 .chart__tooltip {
   background-color: #04838F;
+  color: #FFFFFF;
   display: flex;
   flex-direction: column;
   gap: 2px 0;
