@@ -1,18 +1,19 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChartResponsiveInterface, ChartOptionsInterface } from "src/app/core/models/Chart";
+import { Component, OnInit } from "@angular/core";
 import { ApexNonAxisChartSeries, ApexChart, ApexLegend, ApexTooltip } from "ng-apexcharts";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
-import { Olympic } from "src/app/core/models/Olympic";
-import { Participation } from "src/app/core/models/Participation";
+import { OlympicInterface } from "src/app/core/models/Olympic";
+import { ParticipationInterface } from "src/app/core/models/Participation";
 
 
 export type ChartOptions = {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
-    labels: any;
+    labels: string[];
     legend: ApexLegend;
-    responsive: any;
+    responsive: ChartResponsiveInterface[];
     tooltip: ApexTooltip;
 };
 
@@ -21,18 +22,18 @@ export type ChartOptions = {
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
     public chartOptions: Partial<ChartOptions>;
     public chart: ApexChart = {type: "pie"};
-    public olympics$: Observable<Olympic[]> = of([]);
-    public olympicSubscribe: any;
+    public olympics$: Observable<OlympicInterface[]> = of([]);
     public numberJo: number = 0;
+    public numberCountries: number = 0;
 
     constructor(private olympicService: OlympicService, private router: Router) {
         this.chartOptions = {
             chart: {
                 events: {
-                    click: (event: any, chartContext: any, opts: any) => {
+                    click: (event: MouseEvent, chartContext: ApexChart, opts: ChartOptionsInterface) => {
                         this.router.navigate(["/details", opts.dataPointIndex + 1]);
                     }
                 },
@@ -58,15 +59,15 @@ export class HomeComponent implements OnInit, OnDestroy {
                     breakpoint: 600,
                     options: {
                         chart: {
-                            height: 300,
-                            width: 300
+                            height: 305,
+                            width: 305
                         },
                     }
                 },
             ],
             series: [],
             tooltip: {
-                custom: function(opts: any) {
+                custom: function(opts: ChartOptionsInterface) {
                     return `
                     <div class="chart__tooltip">
                         <span>${opts.w.globals.labels[opts.seriesIndex]}</span>
@@ -80,36 +81,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Init the data
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.olympicSubscribe = this.olympics$.subscribe((olympicData) => {
+        this.olympics$.subscribe((olympicData) => {
             this.getNumberJo(olympicData);
             this.getCountries(olympicData);
         });
     }
 
-    // Destroy the subscriber
-    ngOnDestroy(): void {
-        this.olympicSubscribe.unsubscribe();
-    }
-
     // Get the number of JO's
-    getNumberJo(olympicData: Olympic[]): void {
-        this.numberJo = olympicData?.reduce((countries: Olympic, country: Olympic) => {
+    getNumberJo(olympicData: OlympicInterface[]): void {
+        this.numberJo = olympicData?.reduce((countries: OlympicInterface, country: OlympicInterface) => {
             return (country.participations.length > countries.participations.length ? country : countries);
         })["participations"].length;
     }
 
     // Get the countries
-    getCountries(olympicData: Olympic[]): void {
-        olympicData?.map((data: Olympic) => {
-            this.chartOptions["labels"].push(data.country);
+    getCountries(olympicData: OlympicInterface[]): void {
+        olympicData?.map((data: OlympicInterface) => {
+            this.numberCountries++;
+            this.chartOptions["labels"]?.push(data.country ?? "");
             this.getMedals(olympicData, data.country);
         });
     }
 
     // Get the medals per country
-    getMedals(olympicData: Olympic[], countryName: string): void {
-        const country = (olympicData?.find((event: Olympic) => event.country == countryName));
-        const countryMedals = country?.participations.map((participation: Participation) => {
+    getMedals(olympicData: OlympicInterface[], countryName: string): void {
+        const country = (olympicData?.find((event: OlympicInterface) => event.country == countryName));
+        const countryMedals = country?.participations.map((participation: ParticipationInterface) => {
             return participation.medalsCount;
         }).reduce((a: number, b: number) => a + b, 0);
         this.chartOptions["series"]?.push(countryMedals ?? 0);

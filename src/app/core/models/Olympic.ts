@@ -1,4 +1,4 @@
-export interface Olympic {
+export interface OlympicInterface {
     id: number;
     country: string;
     participations: []; 
