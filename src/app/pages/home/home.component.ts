@@ -1,6 +1,6 @@
 import { ChartResponsiveInterface, ChartOptionsInterface } from "src/app/core/models/Chart";
 import { Component, OnInit } from "@angular/core";
-import { ApexNonAxisChartSeries, ApexChart, ApexLegend, ApexTooltip } from "ng-apexcharts";
+import { ApexChart, ApexLegend, ApexNonAxisChartSeries, ApexTooltip } from "ng-apexcharts";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
@@ -9,11 +9,11 @@ import { ParticipationInterface } from "src/app/core/models/Participation";
 
 
 export type ChartOptions = {
-    series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: string[];
     legend: ApexLegend;
     responsive: ChartResponsiveInterface[];
+    series: ApexNonAxisChartSeries;
     tooltip: ApexTooltip;
 };
 
