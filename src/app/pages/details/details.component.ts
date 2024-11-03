@@ -111,26 +111,11 @@ export class DetailsComponent implements OnInit {
     }
 
     getMedals(currentCountry: any): void {
-        /*this.olympics$.subscribe((response) => {
-            /*const testa = (response?.find((e: any) => e.id == this.countryId));
-            this.nbParticipations = testa?.participations.length;
-            testa?.participations.map((abcdef: any) => {
-                
-                this.chartOptions["series"][0].data.push(abcdef.medalsCount)
-                this.totalMedals+= abcdef.medalsCount;
-            });
-            this.chartOptions["yaxis"].max = Math.max(...this.chartOptions["series"][0].data) + 10;*/
-        /*});*/
         this.nbParticipations = currentCountry?.participations.length ?? 0;
         currentCountry?.participations.map((participation: any) => {
             this.chartOptions["series"]![0].data.push(participation.medalsCount);
-            /*this.chartOptions["yaxis"]!.max = 0;*/
             this.totalMedals+= participation.medalsCount;
         });
-        let max = this.chartOptions["series"]![0].data.reduce((accumulator: any, currentValue: any) => {
-            return Math.max(accumulator, currentValue);
-        }, this.chartOptions["series"]![0].data[0]);
-        /*this.chartOptions?["yaxis"].max = [2020];*/
     }
 
     // Get the total of athletes
