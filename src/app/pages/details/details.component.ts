@@ -29,11 +29,10 @@ export class DetailsComponent implements OnInit {
     public chartOptions: Partial<ChartOptions>;
     public chart: ApexChart = {type: "line"};
     public olympics$: Observable<OlympicInterface[]> = of([]);
-    public currentCountry: any;
+    public currentCountry: OlympicInterface | null = null;
     public totalMedals: number = 0;
 
     countryId: number = 0;
-    maxMedals: number = 0;
     countryName: string = "";
     nbParticipations: number = 0;
     totalAtlhetes: number = 0;
@@ -90,8 +89,7 @@ export class DetailsComponent implements OnInit {
         this.olympics$.subscribe((olympicData) => {
             this.route.params.subscribe(params => {
                 this.countryId = params["id"];
-                this.currentCountry = olympicData?.find((e: any) => e.id == this.countryId);
-                console.log(typeof this.currentCountry)
+                this.currentCountry = olympicData?.find((event: OlympicInterface) => event.id == this.countryId) || null;
                 this.getTitle(this.currentCountry);
                 this.loadData(this.currentCountry);
             });
@@ -99,18 +97,18 @@ export class DetailsComponent implements OnInit {
     }
 
     // Get the title of the country
-    getTitle(currentCountry: OlympicInterface): void {
+    getTitle(currentCountry: OlympicInterface | null): void {
         this.countryName = currentCountry?.country ?? "";
     }
 
     // Load data
-    loadData(currentCountry: OlympicInterface): void {
+    loadData(currentCountry: OlympicInterface | null): void {
         this.nbParticipations = currentCountry?.participations.length ?? 0;
-        currentCountry?.participations.map((participation: any) => {
+        currentCountry?.participations.map((participation: ParticipationInterface) => {
             // Get the dates
             this.chartOptions["xaxis"]?.categories.push(participation.year ?? 0);
             // Get the medals
-            this.chartOptions["series"]![0].data.push(participation.medalsCount);
+            this.chartOptions["series"]![0].data.push(participation.medalsCount as any);
             this.totalMedals+= participation.medalsCount;
             // Get the total of athletes
             this.totalAtlhetes += participation.athleteCount;
