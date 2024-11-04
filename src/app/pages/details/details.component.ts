@@ -5,6 +5,7 @@ import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { ActivatedRoute } from "@angular/router";
 import { OlympicInterface } from "src/app/core/models/Olympic";
+import { ParticipationInterface } from "src/app/core/models/Participation";
 
 
 export type ChartOptions = {
@@ -90,38 +91,28 @@ export class DetailsComponent implements OnInit {
             this.route.params.subscribe(params => {
                 this.countryId = params["id"];
                 this.currentCountry = olympicData?.find((e: any) => e.id == this.countryId);
+                console.log(typeof this.currentCountry)
                 this.getTitle(this.currentCountry);
-                this.getDates(this.currentCountry);
-                this.getMedals(this.currentCountry);
-                this.getAthletes(this.currentCountry);
+                this.loadData(this.currentCountry);
             });
         });
     }
 
     // Get the title of the country
-    getTitle(currentCountry: any): void {
+    getTitle(currentCountry: OlympicInterface): void {
         this.countryName = currentCountry?.country ?? "";
     }
 
-    // Get the dates
-    getDates(currentCountry: any): void {
-        currentCountry?.participations.map((participation: any) => {
-            this.chartOptions["xaxis"]?.categories.push(participation.year ?? 0);
-        });
-    }
-
-    getMedals(currentCountry: any): void {
+    // Load data
+    loadData(currentCountry: OlympicInterface): void {
         this.nbParticipations = currentCountry?.participations.length ?? 0;
         currentCountry?.participations.map((participation: any) => {
+            // Get the dates
+            this.chartOptions["xaxis"]?.categories.push(participation.year ?? 0);
+            // Get the medals
             this.chartOptions["series"]![0].data.push(participation.medalsCount);
             this.totalMedals+= participation.medalsCount;
-        });
-    }
-
-    // Get the total of athletes
-    getAthletes(currentCountry: any): void {
-        this.nbParticipations = currentCountry?.participations.length ?? 0;
-        currentCountry?.participations.map((participation: any) => {
+            // Get the total of athletes
             this.totalAtlhetes += participation.athleteCount;
         });
     }
