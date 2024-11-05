@@ -3,9 +3,10 @@ import { Component, OnInit } from "@angular/core";
 import { ApexChart, ApexDataLabels, ApexGrid, ApexAxisChartSeries, ApexStroke, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from "ng-apexcharts";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { OlympicInterface } from "src/app/core/models/Olympic";
 import { ParticipationInterface } from "src/app/core/models/Participation";
+import { NotFoundComponent } from "../not-found/not-found.component";
 
 
 export type ChartOptions = {
@@ -32,12 +33,13 @@ export class DetailsComponent implements OnInit {
     public currentCountry: OlympicInterface | null = null;
     public totalMedals: number = 0;
 
-    countryId: number = 0;
-    countryName: string = "";
-    nbParticipations: number = 0;
-    totalAtlhetes: number = 0;
+    public countExist: number = 0;
+    public countryId: number = 0;
+    public countryName: string = "";
+    public nbParticipations: number = 0;
+    public totalAtlhetes: number = 0;
     
-    constructor(private olympicService: OlympicService, private route: ActivatedRoute) {
+    constructor(private olympicService: OlympicService, private router: Router, private route: ActivatedRoute) {
         this.chartOptions = {
             chart: {
                 height: 350,
@@ -86,14 +88,26 @@ export class DetailsComponent implements OnInit {
     // Init the data
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.olympics$.subscribe((olympicData) => {
-            this.route.params.subscribe(params => {
+        this.route.params.subscribe(params => {
+            this.olympics$.subscribe((olympicData) => {
                 this.countryId = params["id"];
                 this.currentCountry = olympicData?.find((event: OlympicInterface) => event.id == this.countryId) || null;
+                // Check if data exist
+                if(this.currentCountry == undefined) {
+                    this.checkExist();
+                }
                 this.getTitle(this.currentCountry);
                 this.loadData(this.currentCountry);
             });
         });
+    }
+
+    // Check exist
+    checkExist() {
+        this.countExist = this.countExist + 1;
+        if(this.countExist === 2) {
+            this.router.navigate([NotFoundComponent]);
+        }
     }
 
     // Get the title of the country
