@@ -2,4 +2,8 @@
   display: block;
   font-size: 24px;
   text-align: center;
+}
+
+.chart__details {
+  display: flex;
 }/*# sourceMappingURL=details.component.css.map */

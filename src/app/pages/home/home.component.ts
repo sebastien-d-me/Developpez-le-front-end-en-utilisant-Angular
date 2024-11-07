@@ -1,6 +1,6 @@
 import { ChartResponsiveInterface, ChartOptionsInterface } from "src/app/core/models/Chart";
 import { Component, OnInit } from "@angular/core";
-import { ApexChart, ApexLegend, ApexNonAxisChartSeries, ApexTooltip } from "ng-apexcharts";
+import { ApexChart, ApexFill, ApexLegend, ApexNonAxisChartSeries, ApexTooltip } from "ng-apexcharts";
 import { Observable, of } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
@@ -10,6 +10,7 @@ import { ParticipationInterface } from "src/app/core/models/Participation";
 
 export type ChartOptions = {
     chart: ApexChart;
+    fill: ApexFill;
     labels: string[];
     legend: ApexLegend;
     responsive: ChartResponsiveInterface[];
@@ -34,16 +35,25 @@ export class HomeComponent implements OnInit {
             chart: {
                 events: {
                     click: (event: MouseEvent, chartContext: ApexChart, opts: ChartOptionsInterface) => {
-                        this.router.navigate(["/details", opts.dataPointIndex + 1]);
+                        if(opts.dataPointIndex !== -1) {
+                            this.router.navigate(["/details", opts.dataPointIndex + 1]);
+                        }
                     }
                 },
                 height: 600,
                 type: "pie",
                 width: 600
             },
+            fill: {
+                colors: ["#956065", "#793D52", "#89A1DB", "#9780A1", "#BFE0F1", "#B8CBE7"]
+            },
             labels: [],
             legend: {
-                position: "bottom"
+                customLegendItems: [],
+                markers: {
+                    fillColors:  ["#956065", "#793D52", "#89A1DB", "#9780A1", "#BFE0F1", "#B8CBE7"],
+                },
+                position: "bottom",
             },
             responsive: [
                 {
@@ -56,7 +66,16 @@ export class HomeComponent implements OnInit {
                     }
                 },
                 {
-                    breakpoint: 600,
+                    breakpoint: 900,
+                    options: {
+                        chart: {
+                            height: 405,
+                            width: 400
+                        },
+                    }
+                },
+                {
+                    breakpoint: 400,
                     options: {
                         chart: {
                             height: 305,
@@ -99,6 +118,7 @@ export class HomeComponent implements OnInit {
         olympicData?.map((data: OlympicInterface) => {
             this.numberCountries++;
             this.chartOptions["labels"]?.push(data.country ?? "");
+            this.chartOptions["legend"]?.customLegendItems?.push(data.country ?? "");
             this.getMedals(olympicData, data.country);
         });
     }

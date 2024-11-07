@@ -10,16 +10,18 @@
     </div>
 
     <!--- Chart -->
-    <apx-chart
-        [series]="chartOptions['series']"
+    <apx-chart class="chart__details"
         [chart]="chartOptions['chart']"
-        [xaxis]="chartOptions['xaxis']"
-        [yaxis]="chartOptions['yaxis']"
         [dataLabels]="chartOptions['dataLabels']"
         [grid]="chartOptions['grid']"
+        [responsive]="chartOptions['responsive']"
+        [series]="chartOptions['series']"
         [stroke]="chartOptions['stroke']"
         [title]="chartOptions['title']"
         [tooltip]="chartOptions['tooltip']"
+        [xaxis]="chartOptions['xaxis']"
+        [yaxis]="chartOptions['yaxis']"
+
     ></apx-chart>
     <span class="chart__title">Dates</span>
 

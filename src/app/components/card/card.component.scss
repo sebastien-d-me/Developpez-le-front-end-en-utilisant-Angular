@@ -13,3 +13,11 @@
 .card__number {
     font-weight: bold;
 }
+
+
+/// Responsive
+@media screen and (max-width: 992px) {
+    .card {
+        width: 100%;
+    }
+}

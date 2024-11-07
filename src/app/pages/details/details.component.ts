@@ -1,4 +1,4 @@
-import { ChartResponsiveInterface, ChartOptionsInterface } from "src/app/core/models/Chart";
+import { ChartResponsiveInterface } from "src/app/core/models/Chart";
 import { Component, OnInit } from "@angular/core";
 import { ApexChart, ApexDataLabels, ApexGrid, ApexAxisChartSeries, ApexStroke, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from "ng-apexcharts";
 import { Observable, of } from "rxjs";
@@ -13,6 +13,7 @@ export type ChartOptions = {
     chart: ApexChart;
     dataLabels: ApexDataLabels;
     grid: ApexGrid;
+    responsive: ChartResponsiveInterface[];
     series: ApexAxisChartSeries;
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
@@ -42,11 +43,12 @@ export class DetailsComponent implements OnInit {
     constructor(private olympicService: OlympicService, private router: Router, private route: ActivatedRoute) {
         this.chartOptions = {
             chart: {
-                height: 350,
+                height: 600,
                 toolbar: {
                     show: false
                 },
                 type: "line",
+                width: 600,
                 zoom: {
                     enabled: false
                 }
@@ -57,6 +59,35 @@ export class DetailsComponent implements OnInit {
                     opacity: 0.5
                 }
             },
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    options: {
+                        chart: {
+                            height: 550,
+                            width: 550
+                        },
+                    }
+                },
+                {
+                    breakpoint: 900,
+                    options: {
+                        chart: {
+                            height: 405,
+                            width: 400
+                        },
+                    }
+                },
+                {
+                    breakpoint: 400,
+                    options: {
+                        chart: {
+                            height: 305,
+                            width: 305
+                        },
+                    }
+                },
+            ],
             series: [
                 {
                     data: [],

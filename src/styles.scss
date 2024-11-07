@@ -25,9 +25,11 @@
 .cards {
     align-items: center;
     display: flex;
-    gap: 0 20px;
+    flex-wrap: wrap;
+    gap: 10px 20px;
     justify-content: center;
     margin-top: 25px;
+    width: 100%;
 }
 
 
@@ -41,4 +43,18 @@
     min-width: 60px;
     padding: 5px 10px;
     text-align: center;
+}
+
+
+/// Responsive
+@media screen and (max-width: 992px) {
+    .cards {
+        flex-direction: column;
+    }
+
+    .cards > app-card {
+        display: flex;
+        flex-grow: 1;
+        width: 100%;
+    }
 }

@@ -11,4 +11,10 @@
 
 .card__number {
   font-weight: bold;
+}
+
+@media screen and (max-width: 992px) {
+  .card {
+    width: 100%;
+  }
 }/*# sourceMappingURL=card.component.css.map */

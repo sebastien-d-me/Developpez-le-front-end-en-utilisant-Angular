@@ -1,4 +1,0 @@
-- Suivre les recommandations
-- Readme comment démarrer l'app
-- Savoir expliquer service, composants
-- legende arriver a justifier pourquoi pas comme maquette
