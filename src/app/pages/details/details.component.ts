@@ -160,7 +160,7 @@ export class DetailsComponent implements OnInit {
             // Get the dates
             this.chartOptions["xaxis"]?.categories.push(participation.year ?? 0);
             // Get the medals
-            this.chartOptions["series"]![0].data.push(participation.medalsCount as any);
+            (this.chartOptions["series"]![0].data as number[]).push(participation.medalsCount);
             this.totalMedals+= participation.medalsCount;
             // Get the total of athletes
             this.totalAtlhetes += participation.athleteCount;
