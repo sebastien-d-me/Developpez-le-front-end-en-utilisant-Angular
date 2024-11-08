@@ -1,7 +1,7 @@
 import { ChartResponsiveInterface, ChartOptionsInterface } from "src/app/core/models/Chart";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ApexChart, ApexFill, ApexLegend, ApexNonAxisChartSeries, ApexTooltip } from "ng-apexcharts";
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { Router } from "@angular/router";
 import { OlympicInterface } from "src/app/core/models/Olympic";
@@ -23,13 +23,14 @@ export type ChartOptions = {
     templateUrl: "./home.component.html",
     styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
     public chartOptions: Partial<ChartOptions>;
     public chart: ApexChart = {type: "pie"};
+    public subscription!: Subscription;
     public olympics$: Observable<OlympicInterface[]> = of([]);
     public numberJo: number = 0;
     public numberCountries: number = 0;
-
+    
     constructor(private olympicService: OlympicService, private router: Router) {
         this.chartOptions = {
             chart: {
@@ -96,14 +97,19 @@ export class HomeComponent implements OnInit {
             }
         };
     }
-
+    
     // Init the data
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.olympics$.subscribe((olympicData) => {
+        this.subscription = this.olympics$.subscribe((olympicData) => {
             this.getNumberJo(olympicData);
             this.getCountries(olympicData);
         });
+    }
+
+    // Destroy the observable
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     // Get the number of JO's

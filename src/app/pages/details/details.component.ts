@@ -1,7 +1,7 @@
 import { ChartResponsiveInterface } from "src/app/core/models/Chart";
 import { Component, OnInit } from "@angular/core";
 import { ApexChart, ApexDataLabels, ApexGrid, ApexAxisChartSeries, ApexStroke, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from "ng-apexcharts";
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { OlympicService } from "src/app/core/services/olympic.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OlympicInterface } from "src/app/core/models/Olympic";
@@ -30,10 +30,11 @@ export type ChartOptions = {
 export class DetailsComponent implements OnInit {
     public chartOptions: Partial<ChartOptions>;
     public chart: ApexChart = {type: "line"};
+    public routeSubscription!: Subscription;
+    public subscription!: Subscription;
     public olympics$: Observable<OlympicInterface[]> = of([]);
     public currentCountry: OlympicInterface | null = null;
     public totalMedals: number = 0;
-
     public countExist: number = 0;
     public countryId: number = 0;
     public countryName: string = "";
@@ -119,8 +120,8 @@ export class DetailsComponent implements OnInit {
     // Init the data
     ngOnInit(): void {
         this.olympics$ = this.olympicService.getOlympics();
-        this.route.params.subscribe(params => {
-            this.olympics$.subscribe((olympicData) => {
+        this.routeSubscription = this.route.params.subscribe(params => {
+            this.subscription = this.olympics$.subscribe((olympicData) => {
                 this.countryId = params["id"];
                 this.currentCountry = olympicData?.find((event: OlympicInterface) => event.id == this.countryId) || null;
                 // Check if data exist
@@ -131,6 +132,12 @@ export class DetailsComponent implements OnInit {
                 this.loadData(this.currentCountry);
             });
         });
+    }
+
+    // Destroy the observable
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+        this.routeSubscription.unsubscribe();
     }
 
     // Check exist
